@@ -64,10 +64,10 @@ function update() {
 	//Clear the graphics
 	graphics.clear();
 
-	//Player Controls, doesn't allow them to go off screen.
-	if (oneUpKey.isDown && playerOne.y > playerOne.height/2) playerOne.y -= playerSpeed;
+	//Player Controls, doesn't allow them to go off screen. Like in original game, you can't go all the way to the top as part of a "feature". Totally not a bug at the time.
+	if (oneUpKey.isDown && playerOne.y > (playerOne.height/2) + 16) playerOne.y -= playerSpeed;
 	if (oneDownKey.isDown && playerOne.y < properties.height - playerOne.height/2) playerOne.y += playerSpeed;
-	if (twoUpKey.isDown && playerTwo.y > playerTwo.height/2) playerTwo.y -= playerSpeed;
+	if (twoUpKey.isDown && playerTwo.y > (playerTwo.height/2) + 16) playerTwo.y -= playerSpeed;
 	if (twoDownKey.isDown && playerTwo.y < properties.height - playerTwo.height/2) playerTwo.y += playerSpeed;
 
 	//Ball Motion
@@ -83,6 +83,7 @@ function update() {
 	} 
 	if (ball.y <= 0 || ball.y >= properties.height) ball.vSpeed = -ball.vSpeed;
 
+	// For ball collision on either player, the ball speeds up by 5% so the game eventually ends.
 	//Ball Player One Collision
 	if (ball.x < playerOne.x + 6 && ball.x > playerOne.x - 6) {
 		if (ball.y >= playerOne.y - playerOne.height/2 && ball.y <= playerOne.y + playerOne.height/2) {
