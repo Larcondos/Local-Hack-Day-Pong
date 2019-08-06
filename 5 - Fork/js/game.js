@@ -1,3 +1,5 @@
+// TODO: Add in the ball bouncing at different angles depending on where it hit on the paddle.
+
 // First, we set the properties of the game: the width and height of the game area
 var properties = {
     width: 640,
