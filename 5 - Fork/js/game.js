@@ -30,26 +30,29 @@ function create() {
     twoDownKey = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
 
 	//Initialize the players
+	playerSpeed = 4;
+	
+	
 	playerOne = {
 		x: 32,
-		y: 240,
+		y: properties.height/2,
 		height: 64,
 		score: 0,
 	}
 
 	playerTwo = {
-		x: 608,
-		y: 240,
+		x: properties.width - 32,
+		y: properties.height/2,
 		height: 64,
 		score: 0,
 	}
 
 	defaultBall = {
-		x: 320,
-		y: 240,
+		x: properties.width/2,
+		y: properties.height/2,
 		height: 12,
-		hSpeed: 4 * Math.cos(Math.random()*2*Math.PI),
-		vSpeed: 4 * Math.sin(Math.random()*2*Math.PI)
+		hSpeed: playerSpeed * Math.cos(Math.random()*2*Math.PI),
+		vSpeed: playerSpeed * Math.sin(Math.random()*2*Math.PI)
 	}
 
 	ball = defaultBall;
@@ -61,11 +64,11 @@ function update() {
 	//Clear the graphics
 	graphics.clear();
 
-	//Player Controls
-	if (oneUpKey.isDown && playerOne.y > playerOne.height/2) playerOne.y -= 4;
-	if (oneDownKey.isDown && playerOne.y < 480 - playerOne.height/2) playerOne.y += 4;
-	if (twoUpKey.isDown && playerTwo.y > playerTwo.height/2) playerTwo.y -= 4;
-	if (twoDownKey.isDown && playerTwo.y < 480 - playerTwo.height/2) playerTwo.y += 4;
+	//Player Controls, doesn't allow them to go off screen.
+	if (oneUpKey.isDown && playerOne.y > playerOne.height/2) playerOne.y -= playerSpeed;
+	if (oneDownKey.isDown && playerOne.y < properties.height - playerOne.height/2) playerOne.y += playerSpeed;
+	if (twoUpKey.isDown && playerTwo.y > playerTwo.height/2) playerTwo.y -= playerSpeed;
+	if (twoDownKey.isDown && playerTwo.y < properties.height - playerTwo.height/2) playerTwo.y += playerSpeed;
 
 	//Ball Motion
 	ball.x += ball.hSpeed;
@@ -73,24 +76,24 @@ function update() {
 
 	//Ball Wall Collision (Make the ball respawn if it goes out of bounds)
 	if (ball.x <= -ball.height || ball.x >= properties.width + ball.height) {
-		ball.x = 320;
-		ball.y = 240;
-		ball.hSpeed = 4 * Math.cos(Math.random()*2*Math.PI);
-		ball.vSpeed = 4 * Math.sin(Math.random()*2*Math.PI);
+		ball.x = properties.width/2;
+		ball.y = properties.height/2;
+		ball.hSpeed = playerSpeed * Math.cos(Math.random()*2*Math.PI);
+		ball.vSpeed = playerSpeed * Math.sin(Math.random()*2*Math.PI);
 	} 
 	if (ball.y <= 0 || ball.y >= properties.height) ball.vSpeed = -ball.vSpeed;
 
 	//Ball Player One Collision
 	if (ball.x < playerOne.x + 6 && ball.x > playerOne.x - 6) {
 		if (ball.y >= playerOne.y - playerOne.height/2 && ball.y <= playerOne.y + playerOne.height/2) {
-			ball.hSpeed = Math.abs(ball.hSpeed);
+			ball.hSpeed = (Math.abs(ball.hSpeed) * 1.05);
 		}
 	}
 
 	//Ball Player Two Collision
 	if (ball.x < playerTwo.x + 6 && ball.x > playerTwo.x - 6) {
 		if (ball.y >= playerTwo.y - playerTwo.height/2 && ball.y <= playerTwo.y + playerTwo.height/2) {
-			ball.hSpeed = -Math.abs(ball.hSpeed);
+			ball.hSpeed = (-Math.abs(ball.hSpeed) * 1.05);
 		}
 	}
 
